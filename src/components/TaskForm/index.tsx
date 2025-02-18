@@ -8,7 +8,7 @@ import {
   CardContent,
 } from '@mui/material'
 import { useTaskContext } from '../../context/useTaskContext'
-
+import AddIcon from '@mui/icons-material/Add'
 const TaskForm: React.FC = () => {
   const { addTask } = useTaskContext()
   const [title, setTitle] = useState('')
@@ -46,9 +46,23 @@ const TaskForm: React.FC = () => {
             multiline
             rows={3}
           />
-          <Button type="submit" variant="contained">
-            Add
-          </Button>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              sx={{
+                width: '97px',
+                display: 'flex',
+                borderRadius: '32px',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 1,
+              }}
+            >
+              <AddIcon fontSize="small" /> Add
+            </Button>
+          </Box>
         </Box>
       </CardContent>
     </Card>

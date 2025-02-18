@@ -17,10 +17,12 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import EventIcon from '@mui/icons-material/Event'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
+import MenuBookIcon from '@mui/icons-material/MenuBook'
 import DeleteTaskModal from '../DeleteTaskModal'
 import { useNavigate } from 'react-router-dom'
 import TaskHistoryModal from '../TaskHistoryModal'
 import { TaskHistoryEntry } from '../../context/TaskContext'
+import { STATUS_COLORS } from '../../constants'
 
 const TaskList: React.FC = () => {
   const { tasks, deleteTask, getTaskHistory } = useTaskContext()
@@ -79,14 +81,29 @@ const TaskList: React.FC = () => {
       ? paragraphs.slice(0, 3).join('\n') + '...'
       : description
   }
+  console.log(tasks)
   return (
     <Box sx={{ mt: 4 }}>
       <Typography variant="h4">Tasks</Typography>
 
       {tasks.length === 0 ? (
-        <Typography sx={{ textAlign: 'center', my: 2 }}>
-          <strong>You have nothing to do. Go get some sleep!</strong>
-        </Typography>
+        <Card
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            p: 4,
+            mt: 3,
+          }}
+        >
+          <MenuBookIcon sx={{ fontSize: 60, color: 'gray', mb: 2 }} />
+          <Typography sx={{ textAlign: 'center' }}>
+            You have nothing to do.
+          </Typography>
+          <Typography sx={{ textAlign: 'center' }}>
+            Go get some sleep!
+          </Typography>
+        </Card>
       ) : (
         <List>
           {tasks.map(task => (
@@ -104,9 +121,17 @@ const TaskList: React.FC = () => {
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                       <Chip
                         label={task.status}
-                        color={
-                          task.status === 'To Do' ? 'secondary' : 'primary'
-                        }
+                        sx={{
+                          backgroundColor:
+                            STATUS_COLORS[
+                              task.status as keyof typeof STATUS_COLORS
+                            ].bg,
+                          color:
+                            STATUS_COLORS[
+                              task.status as keyof typeof STATUS_COLORS
+                            ].text,
+                          fontWeight: 'bold',
+                        }}
                         size="small"
                       />
                       <IconButton onClick={e => handleMenuOpen(e, task.id)}>

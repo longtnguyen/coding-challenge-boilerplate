@@ -99,9 +99,16 @@ const EditTask: React.FC = () => {
                 borderRadius: 5,
                 backgroundColor: 'black',
                 '&:hover': { backgroundColor: '#333' },
+                fontSize: '1rem',
+                '@media (max-width: 400px)': { fontSize: '0.6rem', gap: 0.3 },
               }}
             >
-              <CheckIcon fontSize="small" />
+              <CheckIcon
+                sx={{
+                  fontSize: '1rem',
+                  '@media (max-width: 400px)': { fontSize: '0.75rem' },
+                }}
+              />
               Save Changes
             </Button>
             <Button
@@ -114,6 +121,8 @@ const EditTask: React.FC = () => {
                 borderColor: 'rgba(0, 0, 0, 0.23)',
                 color: 'black',
                 '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.08)' },
+                fontSize: '1rem',
+                '@media (max-width: 400px)': { fontSize: '0.6rem' },
               }}
             >
               Cancel

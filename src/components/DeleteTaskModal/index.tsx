@@ -26,7 +26,7 @@ const DeleteTaskModal: React.FC<DeleteTaskModalProps> = ({
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
       <Box sx={{ textAlign: 'center', pt: 3 }}>
-        <DeleteIcon sx={{ fontSize: 48, color: 'gray' }} />
+        <DeleteIcon sx={{ fontSize: '3rem', color: 'gray' }} />
       </Box>
       <DialogTitle sx={{ textAlign: 'center', fontWeight: 'bold' }}>
         Delete Task?

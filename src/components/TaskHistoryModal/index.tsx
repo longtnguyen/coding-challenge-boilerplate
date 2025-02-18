@@ -27,9 +27,16 @@ const TaskHistoryModal: React.FC<TaskHistoryModalProps> = ({
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <Box
-        sx={{ p: 2, height: '70vh', display: 'flex', flexDirection: 'column' }}
+        sx={{
+          p: 2,
+          height: '70vh',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
       >
-        <DialogTitle sx={{ fontWeight: 'bold' }}>Task History</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 'bold', pt: 2, pb: 0 }}>
+          Task History
+        </DialogTitle>
         <DialogContent sx={{ flex: 1, overflowY: 'auto', p: 2 }}>
           <List>
             {history.map((entry, index) => (
