@@ -3,6 +3,17 @@ import { Theme, createTheme } from '@mui/material'
 const white = '#fff'
 
 export const theme: Theme = createTheme({
+  shape: {
+    borderRadius: 16,
+  },
+  // @ts-expect-error TODO: fix this error Target requires 25 element(s) but source may have fewer
+  shadows: [
+    'none',
+    '0px 8px 48px -12px rgba(16, 24, 40, 0.15)',
+    ...(Array(23).fill(
+      '0px 8px 48px -12px rgba(16, 24, 40, 0.15)',
+    ) as string[]),
+  ],
   palette: {
     primary: {
       main: '#000000',
