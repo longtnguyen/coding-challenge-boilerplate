@@ -18,9 +18,11 @@ import EventIcon from '@mui/icons-material/Event'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import DeleteTaskModal from '../DeleteTaskModal'
+import { useNavigate } from 'react-router-dom'
 
 const TaskList: React.FC = () => {
   const { tasks, deleteTask } = useTaskContext()
+  const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = useState<{
     [key: string]: HTMLElement | null
   }>({})
@@ -41,7 +43,8 @@ const TaskList: React.FC = () => {
   }
 
   const handleEditTask = (taskId: string) => {
-    console.log(taskId)
+    navigate(`/edit/${taskId}`)
+    handleMenuClose(taskId)
   }
 
   const handleConfirmDelete = (taskId: string, taskTitle: string) => {
@@ -71,7 +74,7 @@ const TaskList: React.FC = () => {
   }
   return (
     <Box sx={{ mt: 4 }}>
-      <Typography variant="h5">Your Tasks ({tasks.length})</Typography>
+      <Typography variant="h4">Tasks</Typography>
 
       {tasks.length === 0 ? (
         <Typography sx={{ textAlign: 'center', my: 2 }}>
@@ -94,7 +97,9 @@ const TaskList: React.FC = () => {
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                       <Chip
                         label={task.status}
-                        color={task.status === 'ToDo' ? 'secondary' : 'primary'}
+                        color={
+                          task.status === 'To Do' ? 'secondary' : 'primary'
+                        }
                         size="small"
                       />
                       <IconButton onClick={e => handleMenuOpen(e, task.id)}>

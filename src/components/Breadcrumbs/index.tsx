@@ -1,5 +1,10 @@
 import React from 'react'
-import { Breadcrumbs as MUIBreadcrumbs, Link, Typography } from '@mui/material'
+import {
+  Breadcrumbs as MUIBreadcrumbs,
+  Link,
+  Typography,
+  Box,
+} from '@mui/material'
 import NavigateNextIcon from '@mui/icons-material/NavigateNext'
 import { useLocation, Link as RouterLink } from 'react-router-dom'
 
@@ -13,39 +18,29 @@ const Breadcrumbs: React.FC = () => {
     </Link>,
   ]
 
-  if (pathnames.length === 0) {
+  if (pathnames.includes('edit')) {
     breadcrumbs.push(
-      <Typography key="current" color="text.primary">
-        Home
+      <Typography key="edit" color="text.secondary">
+        Edit
       </Typography>,
     )
   } else {
-    pathnames.forEach((value, index) => {
-      const to = `/${pathnames.slice(0, index + 1).join('/')}`
-      const isLast = index === pathnames.length - 1
-      const breadcrumbText = value === 'edit' ? 'Edit' : value
-
-      breadcrumbs.push(
-        isLast ? (
-          <Typography key={to} color="text.primary">
-            {breadcrumbText}
-          </Typography>
-        ) : (
-          <Link key={to} component={RouterLink} to={to} underline="hover">
-            {breadcrumbText}
-          </Link>
-        ),
-      )
-    })
+    breadcrumbs.push(
+      <Typography key="current" color="text.secondary">
+        Home
+      </Typography>,
+    )
   }
 
   return (
-    <MUIBreadcrumbs
-      separator={<NavigateNextIcon fontSize="small" />}
-      aria-label="breadcrumb"
-    >
-      {breadcrumbs}
-    </MUIBreadcrumbs>
+    <Box sx={{ mb: 2 }}>
+      <MUIBreadcrumbs
+        separator={<NavigateNextIcon fontSize="small" />}
+        aria-label="breadcrumb"
+      >
+        {breadcrumbs}
+      </MUIBreadcrumbs>
+    </Box>
   )
 }
 
