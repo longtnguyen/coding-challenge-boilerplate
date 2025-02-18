@@ -11,13 +11,12 @@ import {
   MenuItem,
   Select,
   Typography,
-  IconButton,
 } from '@mui/material'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import EditIcon from '@mui/icons-material/Edit'
 import CheckIcon from '@mui/icons-material/Check'
 import { TASK_STATUSES, STATUS_OPTIONS } from '../../constants'
 import Breadcrumbs from '../Breadcrumbs'
+import { TaskStatus } from '../../context/TaskContext'
 const EditTask: React.FC = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
@@ -41,8 +40,7 @@ const EditTask: React.FC = () => {
 
   return (
     <Box sx={{ maxWidth: 600, margin: 'auto', mt: 4 }}>
-        <Breadcrumbs />
-
+      <Breadcrumbs />
       <Card sx={{ boxShadow: 1, borderRadius: 3, p: 2 }}>
         <CardHeader
           title={
@@ -76,7 +74,7 @@ const EditTask: React.FC = () => {
           <Select
             fullWidth
             value={status}
-            onChange={e => setStatus(e.target.value)}
+            onChange={e => setStatus(e.target.value as TaskStatus)}
             sx={{ mb: 3, borderRadius: 3 }}
           >
             {STATUS_OPTIONS[status]?.map(option => (

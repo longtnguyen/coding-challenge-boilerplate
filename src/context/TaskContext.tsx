@@ -1,20 +1,26 @@
 import React, { createContext, useEffect, useState } from 'react'
 import { TASK_STATUSES } from '../constants'
-export type TaskStatus = (typeof TASK_STATUSES)[keyof typeof TASK_STATUSES];
+export type TaskStatus = (typeof TASK_STATUSES)[keyof typeof TASK_STATUSES]
 
 export interface Task {
   id: string
   title: string
   description: string
   status: TaskStatus
+  history: { previous: TaskStatus; next: TaskStatus; timestamp: Date }[]
 }
-
+export interface TaskHistoryEntry {
+  previous: TaskStatus
+  next: TaskStatus
+  timestamp: Date
+}
 interface TaskContextType {
   tasks: Task[]
   addTask: (title: string, description: string) => void
   updateTask: (id: string, title: string, description: string) => void
   updateStatus: (id: string, newStatus: TaskStatus) => void
   deleteTask: (id: string) => void
+  getTaskHistory: (id: string) => TaskHistoryEntry[]
 }
 
 export const TaskContext = createContext<TaskContextType | undefined>(undefined)
@@ -36,7 +42,14 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({
       id: Date.now().toString(),
       title,
       description,
-      status: 'To Do',
+      status: TASK_STATUSES.ToDo,
+      history: [
+        {
+          previous: TASK_STATUSES.ToDo,
+          next: TASK_STATUSES.ToDo,
+          timestamp: new Date(),
+        },
+      ],
     }
     setTasks([...tasks, newTask])
   }
@@ -54,18 +67,33 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({
     setTasks(
       tasks.map(task => {
         if (task.id === id) {
+          const prevStatus = task.status
           return {
             ...task,
             status: newStatus,
+            history: [
+              ...task.history,
+              { previous: prevStatus, next: newStatus, timestamp: new Date() },
+            ],
           }
         }
         return task
       }),
     )
   }
+  const getTaskHistory = (id: string) => {
+    return tasks.find(task => task.id === id)?.history || []
+  }
   return (
     <TaskContext.Provider
-      value={{ tasks, addTask, deleteTask, updateTask, updateStatus }}
+      value={{
+        tasks,
+        addTask,
+        deleteTask,
+        updateTask,
+        updateStatus,
+        getTaskHistory,
+      }}
     >
       {children}
     </TaskContext.Provider>

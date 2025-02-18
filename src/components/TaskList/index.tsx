@@ -19,9 +19,11 @@ import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import DeleteTaskModal from '../DeleteTaskModal'
 import { useNavigate } from 'react-router-dom'
+import TaskHistoryModal from '../TaskHistoryModal'
+import { TaskHistoryEntry } from '../../context/TaskContext'
 
 const TaskList: React.FC = () => {
-  const { tasks, deleteTask } = useTaskContext()
+  const { tasks, deleteTask, getTaskHistory } = useTaskContext()
   const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = useState<{
     [key: string]: HTMLElement | null
@@ -31,6 +33,8 @@ const TaskList: React.FC = () => {
     title: string
   } | null>(null)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const [historyModalOpen, setHistoryModalOpen] = useState(false)
+  const [taskHistory, setTaskHistory] = useState<TaskHistoryEntry[]>([])
   const handleMenuOpen = (
     event: React.MouseEvent<HTMLButtonElement>,
     taskId: string,
@@ -62,7 +66,10 @@ const TaskList: React.FC = () => {
   }
 
   const handleViewHistory = (taskId: string) => {
-    console.log(taskId)
+    const history = getTaskHistory(taskId)
+    setTaskHistory(history)
+    setHistoryModalOpen(true)
+    handleMenuClose(taskId)
   }
   const trimDescription = (description: string) => {
     const paragraphs = description
@@ -110,7 +117,14 @@ const TaskList: React.FC = () => {
                 }
                 subheader={`Created on: ${new Date(
                   parseInt(task.id),
-                ).toLocaleString()}`}
+                ).toLocaleString(undefined, {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  hour12: true,
+                })}`}
               />
               <CardContent>
                 <Typography
@@ -168,6 +182,11 @@ const TaskList: React.FC = () => {
           onDelete={handleDeleteTask}
         />
       )}
+      <TaskHistoryModal
+        open={historyModalOpen}
+        history={taskHistory}
+        onClose={() => setHistoryModalOpen(false)}
+      />
     </Box>
   )
 }
