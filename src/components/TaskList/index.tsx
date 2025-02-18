@@ -11,15 +11,24 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  ListItemIcon,
 } from '@mui/material'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
+import EventIcon from '@mui/icons-material/Event'
+import EditIcon from '@mui/icons-material/Edit'
+import DeleteIcon from '@mui/icons-material/Delete'
+import DeleteTaskModal from '../DeleteTaskModal'
 
 const TaskList: React.FC = () => {
-  const { tasks } = useTaskContext()
+  const { tasks, deleteTask } = useTaskContext()
   const [anchorEl, setAnchorEl] = useState<{
     [key: string]: HTMLElement | null
   }>({})
-
+  const [selectedTask, setSelectedTask] = useState<{
+    id: string
+    title: string
+  } | null>(null)
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const handleMenuOpen = (
     event: React.MouseEvent<HTMLButtonElement>,
     taskId: string,
@@ -35,8 +44,18 @@ const TaskList: React.FC = () => {
     console.log(taskId)
   }
 
-  const handleDeleteTask = (taskId: string) => {
-    console.log(taskId)
+  const handleConfirmDelete = (taskId: string, taskTitle: string) => {
+    setSelectedTask({ id: taskId, title: taskTitle })
+    setDeleteModalOpen(true)
+    handleMenuClose(taskId)
+  }
+
+  const handleDeleteTask = () => {
+    if (selectedTask) {
+      deleteTask(selectedTask.id)
+      setDeleteModalOpen(false)
+      setSelectedTask(null)
+    }
   }
 
   const handleViewHistory = (taskId: string) => {
@@ -106,25 +125,43 @@ const TaskList: React.FC = () => {
                   {trimDescription(task.description)}
                 </Typography>
               </CardContent>
-
               <Menu
                 anchorEl={anchorEl[task.id]}
                 open={Boolean(anchorEl[task.id])}
                 onClose={() => handleMenuClose(task.id)}
               >
                 <MenuItem onClick={() => handleViewHistory(task.id)}>
+                  <ListItemIcon>
+                    <EventIcon fontSize="small" />
+                  </ListItemIcon>
                   Task History
                 </MenuItem>
                 <MenuItem onClick={() => handleEditTask(task.id)}>
+                  <ListItemIcon>
+                    <EditIcon fontSize="small" />
+                  </ListItemIcon>
                   Edit Task
                 </MenuItem>
-                <MenuItem onClick={() => handleDeleteTask(task.id)}>
+                <MenuItem
+                  onClick={() => handleConfirmDelete(task.id, task.title)}
+                >
+                  <ListItemIcon>
+                    <DeleteIcon fontSize="small" />
+                  </ListItemIcon>
                   Delete Task
                 </MenuItem>
               </Menu>
             </Card>
           ))}
         </List>
+      )}
+      {selectedTask && (
+        <DeleteTaskModal
+          open={deleteModalOpen}
+          taskName={selectedTask.title}
+          onClose={() => setDeleteModalOpen(false)}
+          onDelete={handleDeleteTask}
+        />
       )}
     </Box>
   )
