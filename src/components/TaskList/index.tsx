@@ -81,7 +81,6 @@ const TaskList: React.FC = () => {
       ? paragraphs.slice(0, 3).join('\n') + '...'
       : description
   }
-  console.log(tasks)
   return (
     <Box sx={{ mt: 4 }}>
       <Typography variant="h4">Tasks</Typography>
